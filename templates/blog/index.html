@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Blog</title>
+</head>
+<body>
+    <h1>Hello World</h1>
+    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure, et dolor magnam, dolorum adipisci consectetur porro saepe ex excepturi, quae ea placeat beatae obcaecati pariatur nulla minima ducimus deleniti commodi!
+    <ul>
+        {% for post in posts %}
+        <li>
+            {{post.title}} :
+            {{post.content}}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
