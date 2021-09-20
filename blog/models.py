@@ -15,3 +15,9 @@ class Post(models.Model):
     author = models.ForeignKey(User,on_delete=models.CASCADE,related_name='blog_posts')
     content = models.TextField()
     status = models.CharField(max_length=20, choices=options, default='draft')
+
+    class Meta:
+        ordering = ['published_date','status']
+    
+    def __str__(self):
+        return self.title

@@ -7,14 +7,16 @@
     <title>Django Blog</title>
 </head>
 <body>
-    <h1>Hello World</h1>
-    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure, et dolor magnam, dolorum adipisci consectetur porro saepe ex excepturi, quae ea placeat beatae obcaecati pariatur nulla minima ducimus deleniti commodi!
+    <h1>Hello World : Django Blog</h1>
+    <h3>Article :</h3>
     <ul>
-        {% for post in posts %}
+        {% for post in object_list %}
         <li>
-            {{post.title}} :
+            <strong>{{post.title}} | {{post.author}} | {{post.published_date}}</strong> :
+            <br>
             {{post.content}}
         </li>
+        <hr>
         {% endfor %}
     </ul>
 </body>
