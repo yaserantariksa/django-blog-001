@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+		<a href="{% url 'blog:postlist' %}">Back</a>
+		<h1>Hello World : Django Blog</h1>
+		<h3>Article :</h3>
+		<strong>
+			{{post.title}} | {{post.author}} | {{post.published_date}}
+		</strong>
+		:
+		<br />
+
+		{{post.content}}
+
+		
+{% endblock %}
