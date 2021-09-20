@@ -6,14 +6,17 @@
 		<ul>
 			{% for post in posts %}
 			<li>
-				<strong>
+				<h1>
 					<a href="{{ post.get_absolute_url }}">
-						{{post.title}} | {{post.author}} | {{post.published_date}}
+						{{post.title}} 
 					</a>
-				</strong>
-				:
-				<br />
-				{{post.content}}
+				</h1>
+				<p>
+					created : {{post.author}} | {{post.published_date}}
+				</p>
+				<p>
+					{{post.content|safe|truncatechars:50 }}
+				</p>
 			</li>
 			<hr />
 			{% endfor %}

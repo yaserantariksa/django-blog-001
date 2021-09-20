@@ -4,14 +4,14 @@
 
 		<a href="{% url 'blog:postlist' %}">Back</a>
 		<h1>Hello World : Django Blog</h1>
-		<h3>Article :</h3>
-		<strong>
-			{{post.title}} | {{post.author}} | {{post.published_date}}
-		</strong>
-		:
-		<br />
-
-		{{post.content}}
-
+		<h2>
+			{{post.title}}
+		</h2>
+		<p>
+			created : {{post.author}} | {{post.published_date}}
+		</p>
+		<p>
+			{{post.content|safe}}
+		</p>
 		
 {% endblock %}
