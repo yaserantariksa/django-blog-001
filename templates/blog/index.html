@@ -15,7 +15,7 @@
 					created : {{post.author}} | {{post.published_date}}
 				</p>
 				<p>
-					{{post.content|safe|truncatechars:50 }}
+					{{post.content|truncatechars:80|safe }}
 				</p>
 			</li>
 			<hr />
