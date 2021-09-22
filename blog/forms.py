@@ -7,7 +7,7 @@ class NewCommentForm(forms.ModelForm):
         model = Comment
         fields = ('name','email','content')
         widgets = {
-            "name" : forms.TextInput(attrs={"class":"col-sm-6"}),
-            "email" : forms.TextInput(attrs={"class":"col-sm-6"}),
-            "content" : forms.TextInput(attrs={"class":"col-sm-6"}),
+            "name" : forms.TextInput(attrs={"class":" form-control col-sm-6"}),
+            "email" : forms.TextInput(attrs={"class":"form-control col-sm-6"}),
+            "content" : forms.TextInput(attrs={"class":"form-control col-sm-6"}),
         }
