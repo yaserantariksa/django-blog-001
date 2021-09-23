@@ -17,6 +17,10 @@
 				<p>
 					{{post.content|truncatechars:80|safe }}
 				</p>
+				Categories : 
+				{% for cat in post.categories.all %}
+				{{ cat }} |
+				{% endfor %}
 			</li>
 			<hr />
 			{% endfor %}

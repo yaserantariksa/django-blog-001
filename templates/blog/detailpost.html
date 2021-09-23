@@ -8,6 +8,10 @@
 		<h2>
 			{{post.title}}
 		</h2>
+		Categories : 
+				{% for cat in post.categories.all %}
+				{{ cat }} |
+				{% endfor %}
 		<p>
 			created : {{post.author}} | {{post.published_date}}
 		</p>

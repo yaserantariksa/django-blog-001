@@ -14,6 +14,4 @@ class Comments(admin.ModelAdmin):
     list_filter = ("status","publish")
     search_fields = ("name","email","content")
 
-# Register your models here.
-# admin.site.register(models.Post,AuthorAdmin)
-# admin.site.register(models.Comment,Comments)
+admin.site.register(models.Category)
