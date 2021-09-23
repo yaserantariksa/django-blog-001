@@ -2,6 +2,7 @@ from blog.forms import NewCommentForm
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from .models import Post
 from .forms import NewCommentForm
+from django.views.generic import ListView
 
 # Create your views here.
 
@@ -38,3 +39,13 @@ def detailpost(request,post):
         },
     )
 
+class CatListView(ListView):
+    template_name = 'blog/category.html'
+    context_object_name = 'catlist'
+
+    def get_queryset(self):
+        content = {
+            'cat' : self.kwargs['category'],
+            'posts' : Post.objects.filter(category__name=self.kwargs['category']).filter(status='published')
+        }
+        return content
