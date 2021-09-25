@@ -9,12 +9,13 @@
 			{{post.title}}
 		</h2>
 		Categories : 
-				{% for cat in post.categories.all %}
+				{% for cat in post.category.all %}
 				{{ cat }} |
 				{% endfor %}
 		<p>
 			created : {{post.author}} | {{post.published_date}}
 		</p>
+		<img src="{{ post.image.url }}" alt="image" style="width: 300px;">
 		<p>
 			{{post.content|safe}}
 		</p>

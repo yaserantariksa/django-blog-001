@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <title>DJANGO BLOG</title>
 </head>
-<body>
+<body style="font-family:'Courier New', Courier, monospace;">
     <header>
         <div>
             <h3>
@@ -24,11 +24,23 @@
         <a href="{% url 'blog:postlist' %}">Register</a>
     </div>
     </header>
-    <div class="container">
+    <div class="container mt-3">
+        <div class="row">
+            <div class=" navbar-nav col-3" style="background-color: pink;">
+                Categories :
+                {% for category in category_list %}
+                <a class="dropdown-item" href="/category/{{ category.name }}">
+                    {{ category.name|title }}
+                </a>
+                {% endfor %}
+            </div>
+            <div class="col-9" style="background-color: powderblue;">
+                {% block content %}
+            
+                {% endblock %}
+            </div>
+        </div>
 
-    {% block content %}
-
-    {% endblock %}   
 
     </div>
 

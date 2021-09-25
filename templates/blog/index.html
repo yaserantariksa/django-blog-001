@@ -14,11 +14,14 @@
 				<p>
 					created : {{post.author}} | {{post.published_date}}
 				</p>
+				<!-- <img src="https://picsum.photos/200/100" alt="Image"> -->
+				<img src="{{ post.image.url }}" alt="image" style="width: 300px;">
+				<!-- <p>{{ post.image.url }}</p> -->
 				<p>
 					{{post.content|truncatechars:80|safe }}
 				</p>
 				Categories : 
-				{% for cat in post.categories.all %}
+				{% for cat in post.category.all %}
 				{{ cat }} |
 				{% endfor %}
 			</li>

@@ -1,1 +1,22 @@
-category page
+{% extends 'blog/base.html' %}
+
+{% block title %}
+Catlist
+{% endblock %}
+
+{% block content %}
+<h1>List of {{ catlist.cat }} posts</h1>
+
+{% for post in catlist.posts %}
+<ul>
+    <li>
+        <a href="{{ post.get_absolute_url }}">
+            <h2>{{ post.title }}</h2>
+            <img src="{{ post.image.url }}" alt="image" style="width: 300px;">
+            <p>{{ post.content|safe|truncatechars:80 }}</p>
+        </a>
+    </li>
+</ul>
+{% endfor %}
+
+{% endblock %}
