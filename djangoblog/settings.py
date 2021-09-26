@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+# from django.core.files.storage import FileSystemStorage
+# fs = FileSystemStorage(location='media_root/blog')
 
 from pathlib import Path
 import os

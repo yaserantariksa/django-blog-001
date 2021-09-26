@@ -5,6 +5,10 @@ from django.urls import reverse
 
 # Create your models here.
 
+def user_directory_path(instance,filename):
+    return 'blog/{0}/{1}'.format(instance.id,filename)
+
+
 class Category (models.Model):
     name = models.CharField(max_length=50)
 
@@ -27,7 +31,7 @@ class Post(models.Model):
     slug = models.CharField(max_length=50)
     published_date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User,on_delete=models.CASCADE,related_name='blog_posts')
-    image = models.ImageField(upload_to='blog/', default='blog/default.jpg')
+    image = models.ImageField(upload_to=user_directory_path, default='blog/default.jpg')
     content = models.TextField()
     status = models.CharField(max_length=20, choices=options, default='draft')
 
