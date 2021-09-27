@@ -11,15 +11,16 @@
 						{{post.title}} 
 					</a>
 				</h1>
-				<p>
+				<p><small>
 					created : {{post.author}} | {{post.published_date}}
-				</p>
+				</small></p>
 				<!-- <img src="https://picsum.photos/200/100" alt="Image"> -->
 				<img src="{{ post.image.url }}" alt="{{post.title}}" style="width: 300px;">
 				<!-- <p>{{ post.image.url }}</p> -->
 				<p>
 					{{post.content|truncatechars:80|safe }}
 				</p>
+				<hr>
 				Categories : 
 				{% for cat in post.category.all %}
 				{{ cat }} |

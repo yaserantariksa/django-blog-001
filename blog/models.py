@@ -63,4 +63,4 @@ class Comment(MPTTModel):
         order_insertion_by = ["-publish"]
 
     def __str__(self):
-        return f"Comment by.{self.name}"
+        return f"Comment {self.content} - by.{self.name}"

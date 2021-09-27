@@ -13,28 +13,41 @@
 				{{ cat }} |
 				{% endfor %}
 		<p>
-			created : {{post.author}} | {{post.published_date}}
+			<small> created : {{post.author}} | {{post.published_date}} </small>
 		</p>
 		<img src="{{ post.image.url }}" alt="{{post.title}}" style="width: 300px;">
+
 		<p>
 			{{post.content|safe}}
 		</p>
-
+		<hr>
+		<h5>
 		{% with comments.count as total_comments %}
 
 		{{ total_comments }} comment{{ total_comments|pluralize }}
 
 		{% endwith %}
-		
-		{% for comment in comments %}
-		<br>
-		{{ forloop.counter }} by {{ comment.name }}
-		on {{ comment.publish }}
-		{{ comment.content|linebreaks }}
-		{% empty %}
-		<small>There are no comments for this post.</small>
-		{% endfor %}
+		</h5>
 
+		{% load mptt_tags %}
+		<div>
+			{% recursetree comments %}
+			<div>{{ node.content }}</div>
+			<div>{{ node.level }}</div>
+
+			{% if not node.is_leaf_node %}
+			<div class="children ps-3">
+				{{ children }}
+			</div>
+			{% endif %}
+
+			{% endrecursetree %}
+		</div>
+		
+
+		<br>
+				
+		<div>
 		Make a new comment :
 		<form action="" id="commentform" method="POST">
 			<div class="form-group">
@@ -43,7 +56,7 @@
 			</div>
 			<button type="submit" class="btn btn-primary btn-md btn-block">Submit</button>
 		</form>
-
+		</div>
 
 
 		
