@@ -1,91 +1,112 @@
-{% extends 'blog/base.html' %}
-
-{% block content %}
+{% extends 'blog/base.html' %} {% block content %}
 <style>
 	.children form {
 		margin-left: -48px;
 	}
 </style>
 
-		<a href="{% url 'blog:postlist' %}">Back</a>
-		<h1>Hello World : Django Blog</h1>
-		<hr>
-		<h2>
-			{{post.title}}
-		</h2>
-		Categories : 
-				{% for cat in post.category.all %}
-				{{ cat }} |
-				{% endfor %}
-		<p>
-			<small> created : {{post.author}} | {{post.published_date}} </small>
-		</p>
-		<img src="{{ post.image.url }}" alt="{{post.title}}" style="width: 300px;">
+<a href="{% url 'blog:postlist' %}">Back</a>
+<h1>Hello World : Django Blog</h1>
+<hr />
+<h2>{{post.title}}</h2>
+Categories : {% for cat in post.category.all %} {{ cat }} | {% endfor %}
+<p>
+	<small> created : {{post.author}} | {{post.published_date}} </small>
+</p>
+<img src="{{ post.image.url }}" alt="{{post.title}}" style="width: 300px" />
 
-		<p>
-			{{post.content|safe}}
-		</p>
-		<hr>
-		<h5>
-		{% with comments.count as total_comments %}
+<p>{{post.content|safe}}</p>
+<hr />
+	{% with allcomments.count as total_comments %} 
+	<h5>
+	{{ total_comments }} comment{{ total_comments|pluralize }} : 
+	</h5>
+	{% endwith %}
 
-		{{ total_comments }} comment{{ total_comments|pluralize }} :
-
-		{% endwith %}
-		</h5>
-
-		{% load mptt_tags %}
-		<div>
-			{% recursetree comments %}
-			<div id="{{ node.id }}" class='px-2 py-2 mb-2' style="border: 1px solid skyblue; border-radius: 10px;">
-				<small><div class="d-flex justify-content-between">
+{% load mptt_tags %}
+<div>
+	{% recursetree comments %}
+	<div id="{{ node.id }}" class="px-2 py-2 mb-2" style="border: 1px solid skyblue; border-radius: 10px">
+		<small>
+			<div class="d-flex justify-content-between">
 				<p><strong> By : {{ node.name }} </strong></p>
 				<p>{{ node.publish }}</p>
-				</div></small>
-			<div>{{ node.content }}</div>
-			{% if node.level < 2 %}
-			<button class="btn btn-info btn-sm btn-block" onclick="myFunction({{ node.id }})">Reply</button>
+			</div>
+		</small>
+		<div>{{ node.content }}</div>
+		{% if node.level < 2 %} <button class="btn btn-info btn-sm btn-block" onclick="myFunction({{ node.id }})">
+			Reply
+			</button>
 			{% endif %}
-			</div>
+	</div>
 
-			{% if not node.is_leaf_node %}
-			<div class="children ps-5">
-				{{ children }}
-			</div>
+	{% if not node.is_leaf_node %}
+	<div class="children ps-5">{{ children }}</div>
+	{% endif %} {% endrecursetree %}
+</div>
+
+<div class="py-4">
+	<nav aria-label="Page navigation">
+		{% if comments.has_other_pages %}
+		<ul class="pagination pagination-sm">
+
+			{% if comments.has_previous %}
+			<li class="page-item">
+				<a class="page-link" href="?page={{ comments.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+			</li>
+			{% else %}
+			<li class="page-item disabled"">
+				<a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+			</li>
 			{% endif %}
-			
-			{% endrecursetree %}
-		</div>
-		
 
-		<br>
-				
-		<div>
-		 <h2>Make a new comment : </h2>
-		<form id="myform" method="POST">
-			<div class="form-group ps-3">
-				{% csrf_token %}
-				{{comment_form.as_p}}
-			</div>
-			<button type="submit" class="btn btn-primary btn-md btn-block ms-3">Submit</button>
-		</form>
-		</div>
+			{% for num in comments.paginator.page_range %}
+			{% if comments.number == num %}
+			<li class="page-item active">
+				<span class="page-link active">{{ num }} <span class="visually-hidden">(curent)</span></span>
+			</li>
+			{% else %}
+			<li><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+			{% endif %}
+			{% endfor %}
 
+			{% if comments.has_next %}
+			<li class="page-item"><a class="page-link" href="?page={{ comments.next_page_number }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+			{% else %}
+			<li class="page-item disabled"><a class="page-link" href="#" aria-label="Next"><span
+						aria-hidden="true">&raquo;</span></a></li>
+			{% endif %}
+		</ul>
+		{% endif %}
+	</nav>
+</div>
 
+<br />
+
+<div>
+	<h2>Make a new comment :</h2>
+	<form id="myform" method="POST">
+		<div class="form-group ps-3">{% csrf_token %} {{comment_form.as_p}}</div>
+		<button type="submit" class="btn btn-primary btn-md btn-block ms-3">
+			Submit
+		</button>
+	</form>
+</div>
 
 <script>
 	function formExit() {
-		document.getElementById("newform").remove();
+		document.getElementById('newform').remove();
 	}
 
 	function myFunction(id) {
-		if(document.contains(document.getElementById("newform"))) {
-			document.getElementById("newform").remove();
+		if (document.contains(document.getElementById('newform'))) {
+			document.getElementById('newform').remove();
 		}
 
 		var a = document.getElementById(id);
-		a.insertAdjacentHTML('afterend',
-		'<div>\
+		a.insertAdjacentHTML(
+			'afterend',
+			'<div>\
 			<form id="newform" class="form-insert col-sm-10 pb-4 mx-auto" method="POST">\
 				<div class="d-flex justify-content-between pt-3"><h2>Reply:</h2><div><button type="button" class="btn btn-dark btn-sm btn-block" onclick="formExit()">Close</button></div></div>\
 				{% csrf_token %}\
@@ -93,7 +114,11 @@
 				<label for="id_name">Name:</label>\
 				<input type="text" name="name" class=" form-control" maxlength="100" required="" id="id_name">\
 				<select name="parent" class="d-none" id="id_parent">\
-				<option value="' +id+ '" selected="' +id+ '"></option>\
+				<option value="' +
+			id +
+			'" selected="' +
+			id +
+			'"></option>\
 				</select>\
 				<label for="id_email">Email:</label>\
 				<input type="text" name="email" class="form-control" maxlength="254" required="" id="id_email">\
@@ -103,10 +128,11 @@
 				<br>\
 				<button type="submit" class="btn btn-primary btn-sm btn-block">Submit</button>\
 			</form>\
-		</div>');
+		</div>'
+		);
 	}
 
-	$('#newform').trigger("reset");
+	$('#newform').trigger('reset');
 </script>
 
 {% endblock %}

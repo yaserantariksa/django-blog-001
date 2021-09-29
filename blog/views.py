@@ -1,3 +1,4 @@
+from django.core import paginator
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from .models import Category, Post
 from .forms import NewCommentForm
@@ -14,7 +15,18 @@ def postslist(request):
 
 def detailpost(request,post):
     post = get_object_or_404(Post, slug=post, status='published')
-    comments = post.comments.filter(status=True)
+
+    allcomments = post.comments.filter(status=True)
+    page = request.GET.get('page',1)
+    paginator = Paginator(allcomments,3)
+
+    try:
+        comments = paginator.page(page)
+    except PageNotAnInteger:
+        comments = paginator.page(1)
+    except EmptyPage:
+        comments = paginator.page(paginator.num_pages)
+
     user_comment = None
     comment_form = NewCommentForm()
 
@@ -36,6 +48,7 @@ def detailpost(request,post):
             "comments":user_comment,
             "comments" : comments,
             "comment_form" : comment_form,
+            "allcomments" : allcomments,
         },
     )
 
