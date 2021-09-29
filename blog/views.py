@@ -1,8 +1,8 @@
-from blog.forms import NewCommentForm
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from .models import Category, Post
 from .forms import NewCommentForm
 from django.views.generic import ListView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 

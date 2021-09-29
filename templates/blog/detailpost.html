@@ -1,6 +1,11 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
+<style>
+	.children form {
+		margin-left: -48px;
+	}
+</style>
 
 		<a href="{% url 'blog:postlist' %}">Back</a>
 		<h1>Hello World : Django Blog</h1>
@@ -24,7 +29,7 @@
 		<h5>
 		{% with comments.count as total_comments %}
 
-		{{ total_comments }} comment{{ total_comments|pluralize }}
+		{{ total_comments }} comment{{ total_comments|pluralize }} :
 
 		{% endwith %}
 		</h5>
@@ -32,15 +37,23 @@
 		{% load mptt_tags %}
 		<div>
 			{% recursetree comments %}
+			<div id="{{ node.id }}" class='px-2 py-2 mb-2' style="border: 1px solid skyblue; border-radius: 10px;">
+				<small><div class="d-flex justify-content-between">
+				<p><strong> By : {{ node.name }} </strong></p>
+				<p>{{ node.publish }}</p>
+				</div></small>
 			<div>{{ node.content }}</div>
-			<div>{{ node.level }}</div>
+			{% if node.level < 2 %}
+			<button class="btn btn-info btn-sm btn-block" onclick="myFunction({{ node.id }})">Reply</button>
+			{% endif %}
+			</div>
 
 			{% if not node.is_leaf_node %}
-			<div class="children ps-3">
+			<div class="children ps-5">
 				{{ children }}
 			</div>
 			{% endif %}
-
+			
 			{% endrecursetree %}
 		</div>
 		
@@ -48,16 +61,52 @@
 		<br>
 				
 		<div>
-		Make a new comment :
-		<form action="" id="commentform" method="POST">
-			<div class="form-group">
+		 <h2>Make a new comment : </h2>
+		<form id="myform" method="POST">
+			<div class="form-group ps-3">
 				{% csrf_token %}
 				{{comment_form.as_p}}
 			</div>
-			<button type="submit" class="btn btn-primary btn-md btn-block">Submit</button>
+			<button type="submit" class="btn btn-primary btn-md btn-block ms-3">Submit</button>
 		</form>
 		</div>
 
 
-		
+
+<script>
+	function formExit() {
+		document.getElementById("newform").remove();
+	}
+
+	function myFunction(id) {
+		if(document.contains(document.getElementById("newform"))) {
+			document.getElementById("newform").remove();
+		}
+
+		var a = document.getElementById(id);
+		a.insertAdjacentHTML('afterend',
+		'<div>\
+			<form id="newform" class="form-insert col-sm-10 pb-4 mx-auto" method="POST">\
+				<div class="d-flex justify-content-between pt-3"><h2>Reply:</h2><div><button type="button" class="btn btn-dark btn-sm btn-block" onclick="formExit()">Close</button></div></div>\
+				{% csrf_token %}\
+				<div class="form-group">\
+				<label for="id_name">Name:</label>\
+				<input type="text" name="name" class=" form-control" maxlength="100" required="" id="id_name">\
+				<select name="parent" class="d-none" id="id_parent">\
+				<option value="' +id+ '" selected="' +id+ '"></option>\
+				</select>\
+				<label for="id_email">Email:</label>\
+				<input type="text" name="email" class="form-control" maxlength="254" required="" id="id_email">\
+				<label for="id_content">Content:</label>\
+				<input type="text" name="content" class="form-control" required="" id="id_content">\
+				</div>\
+				<br>\
+				<button type="submit" class="btn btn-primary btn-sm btn-block">Submit</button>\
+			</form>\
+		</div>');
+	}
+
+	$('#newform').trigger("reset");
+</script>
+
 {% endblock %}
