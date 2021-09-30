@@ -1,7 +1,8 @@
+from django import forms
 from django.core import paginator
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from .models import Category, Post
-from .forms import NewCommentForm
+from .forms import NewCommentForm, PostSearchForm
 from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -69,3 +70,16 @@ def category_list(request):
         'category_list': category_list
     }
     return context
+
+def post_search(request):
+    form = PostSearchForm()
+    q = ''
+    results = []
+
+    if 'q' in request.GET:
+        form = PostSearchForm(request.GET)
+        if form.is_valid():
+            q = form.cleaned_data['q']
+            results = Post.objects.filter(title__contains=q)
+
+    return render(request, 'blog/search.html',{'form':form,'q':q, 'results':results})

@@ -22,3 +22,6 @@ class NewCommentForm(forms.ModelForm):
             "email" : forms.TextInput(attrs={"class":"form-control col-sm-6"}),
             "content" : forms.TextInput(attrs={"class":"form-control col-sm-6"}),
         }
+
+class PostSearchForm(forms.Form):
+    q = forms.CharField()

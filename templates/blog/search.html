@@ -1,0 +1,29 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+    <form method="get">
+        {{ form.as_p }}
+        <input class='btn btn-primary my-1' type='submit' value='search'>
+    </form>
+    {% if q %}
+    <h6 class="mt-3"> Post containing "{{ q }}" :
+        {% with results.count as total_result %}
+        found {{ total_result }} result{{total_result|pluralize}}
+        {% endwith %}
+    </h6>    
+    {% endif %}
+
+    <h5 class="my-3">Search result : </h5>
+    {% for result in results %}
+        <ul>
+            <li>
+                <a href="{{ result.get_absolute_url }}">
+                    <h3>{{ result.title }}</h3>
+                    <p>{{ result.content|safe|truncatechars:80 }}</p>
+                </a>
+            </li>
+        </ul>
+    {% endfor %}
+
+{% endblock %}
