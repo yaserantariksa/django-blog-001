@@ -19,10 +19,12 @@
     <div>
         <a href="{% url 'blog:postlist' %}">Home</a>
         <a href="{% url 'blog:postlist' %}">Add Post</a>
-        <a href="{% url 'blog:searchpost' %}">Search Post</a>
         <a href="{% url 'blog:postlist' %}">Login</a>
         <a href="{% url 'blog:postlist' %}">Logout</a>
         <a href="{% url 'blog:postlist' %}">Register</a>
+        <form class="form-inline my-2 col-3" action="/search/" method="get">
+            <input class="form-control me-sm-2" name="q" type="search" aria-label="Search" placeholder="search" autofocus>
+        </form>
     </div>
     </header>
     <div class="container mt-3">

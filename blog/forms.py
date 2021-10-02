@@ -1,6 +1,7 @@
 from django import forms
+from django.db.models import query
 from django.forms import fields, widgets
-from .models import Comment
+from .models import Category, Comment
 from mptt.forms import TreeNodeChoiceField
 
 class NewCommentForm(forms.ModelForm):
@@ -25,3 +26,8 @@ class NewCommentForm(forms.ModelForm):
 
 class PostSearchForm(forms.Form):
     q = forms.CharField()
+    c = forms.ModelChoiceField(queryset=Category.objects.all().order_by('name'))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['c'].required = False
