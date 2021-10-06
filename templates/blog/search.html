@@ -1,14 +1,22 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    <form method="get">
-        {{ form.as_p }}
-        <input class='btn btn-primary my-1' type='submit' value='search'>
+    <form class="form-control" method="get">
+        {% csrf_token %}
+        <p>Search :</p>
+        {{ form.q }}
+
+        <ul class="dropdown-menu col-6 ps-2" role="menu" aria-labelledby="menu" id="list">
+            
+        </ul>
+
+
+        <input class='btn btn-primary my-3' type='submit' value='search'>
     </form>
 
     
     {% if q %}
-    <h6> Post containing "{{ q }}" :
+    <h6 class="mt-4"> Post containing "{{ q }}" :
         {% with results.count as total_result %}
         found {{ total_result }} result{{total_result|pluralize}}
         {% endwith %}
@@ -17,15 +25,55 @@
 
     <h5 class="my-3">Search result : </h5>
     {% for result in results %}
-        <ul>
-            <li>
-                <a href="{{ result.get_absolute_url }}">
-                    <h3>{{ result.title }}</h3>
-                    <p>{{ result.content|safe|truncatechars:80 }}</p>
-                </a>
-            </li>
-        </ul>
+    <div class="card my-2" width="80%">
+        <a href="{{ result.get_absolute_url }}" class="text-decoration-none text-reset">
+        <div class="card-header">
+            <h4>{{ result.title }}</h4>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ result.content|safe|truncatechars:200 }}</p>
+        </div>
+        </a>
+    </div>
     {% endfor %}
+
+
+<script>
+    $(document).on('keyup','#id_q', function(e) {
+        e.preventDefault();
+
+        var minlength = 3 ;
+        var results = [];
+
+        if ($('#id_q').val().length >= minlength ) {
+            $.ajax({
+                type:'POST',
+                url:'{% url "blog:post_search" %}',
+                data:{
+                    ss: $('#id_q').val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    action : 'post',
+                },
+                success: function(json) {
+
+                    $.each(JSON.parse(json.search_string),function(i, post){
+                        results.push('<li class="my-2 ps-2"><a href="/'+post.fields.slug +'">' +post.fields.title + '</a></li>')
+                    })
+
+                    if (!$(".show")[0]){
+                        $(".menudd").trigger('click')
+                    }
+
+                    document.getElementById("list").innerHTML = (!results.length) ? " No result match your query" : results.join("");
+                    console.log(results);
+                },
+                error: function(xhr, errmsg, err) {
+
+                }
+            });
+        }
+    })
+</script>
 
     
 

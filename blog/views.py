@@ -6,11 +6,22 @@ from .forms import NewCommentForm, PostSearchForm
 from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from django.core import serializers
+from django.http import JsonResponse
 
 # Create your views here.
 
 def postslist(request):
     posts = Post.newmanager.all()
+    page = request.GET.get('page',1)
+    paginator = Paginator(posts, 5)
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
 
     return render(request,'blog/index.html',{'posts':posts})
 
@@ -63,10 +74,12 @@ class CatListView(ListView):
             'cat' : self.kwargs['category'],
             'posts' : Post.objects.filter(category__name=self.kwargs['category']).filter(status='published')
         }
+
         return content
 
 def category_list(request):
     category_list = Category.objects.exclude(name='default')
+
     context = {
         'category_list': category_list
     }
@@ -78,6 +91,15 @@ def post_search(request):
     c = ''
     results = []
     query = Q()
+
+    if request.POST.get('action') == 'post':
+        search_string = str(request.POST.get('ss'))
+        if search_string is not None:
+            search_string = Post.objects.filter(title__contains=search_string)[:3]
+
+            data = serializers.serialize('json',list(search_string), fields=('id','tittle','slug','title'))
+
+            return JsonResponse({'search_string':data})
 
     if 'q' in request.GET:
         form = PostSearchForm(request.GET)

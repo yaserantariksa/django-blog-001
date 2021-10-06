@@ -30,4 +30,10 @@ class PostSearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['c'].label = ''
         self.fields['c'].required = False
+        self.fields['c'].label = 'Category'
+        self.fields['c'].widget.attrs.update({'class' : 'form-select mb-2'})
+        self.fields['q'].lable = 'Search For'
+        self.fields['q'].widget.attrs.update({'class' : 'form-control dropdown-toggle menudd'})
+        self.fields['q'].widget.attrs.update({'data-bs-toggle':'dropdown'})

@@ -1,33 +1,63 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-		<h1>Hello World : Django Blog</h1>
-		<h3>Article :</h3>
-		<ul>
 			{% for post in posts %}
-			<li>
-				<h1>
-					<a href="{{ post.get_absolute_url }}">
-						{{post.title}} 
-					</a>
-				</h1>
-				<p><small>
-					created : {{post.author}} | {{post.published_date}}
-				</small></p>
-				<!-- <img src="https://picsum.photos/200/100" alt="Image"> -->
-				<img src="{{ post.image.url }}" alt="{{post.title}}" style="width: 300px;">
-				<!-- <p>{{ post.image.url }}</p> -->
-				<p>
-					{{post.content|truncatechars:80|safe }}
-				</p>
-				<hr>
-				Categories : 
-				{% for cat in post.category.all %}
-				{{ cat }} |
-				{% endfor %}
-			</li>
-			<hr />
+			<a href="{{ post.get_absolute_url }}" class="text-decoration-none text-reset">
+				<div class="card mb-3 mx-auto " style="max-width: 80%;">
+  					<div class="row g-0">
+    					<div class="col-md-2 d-flex align-items-center justify-content-center">
+      						<img src="{{ post.image.url }}" alt="{{post.title}}" class="img-fluid rounded-start">
+    					</div>
+    					<div class="col-md-10">
+      						<div class="card-body ps-5">
+        						<h5 class="card-title">{{post.title}} </h5>
+        						<p class="card-text"><small class="text-muted">created : {{post.author}} | {{post.published_date}}</small></p>
+        						<p class="card-text">{{post.content|truncatechars:80|safe }}</p>
+								Categories : 
+								{% for cat in post.category.all %}
+								{{ cat }} |
+								{% endfor %}
+      						</div>
+    					</div>
+  					</div>
+				</div>
+			</a>
 			{% endfor %}
+
+<div class="py-4">
+	<nav aria-label="Page navigation">
+		{% if posts.has_other_pages %}
+		<ul class="pagination pagination-sm">
+
+			{% if posts.has_previous %}
+			<li class="page-item">
+				<a class="page-link" href="?page={{ posts.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+			</li>
+			{% else %}
+			<li class="page-item disabled"">
+				<a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+			</li>
+			{% endif %}
+
+			{% for num in posts.paginator.page_range %}
+			{% if posts.number == num %}
+			<li class="page-item active">
+				<span class="page-link active">{{ num }} <span class="visually-hidden">(curent)</span></span>
+			</li>
+			{% else %}
+			<li><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+			{% endif %}
+			{% endfor %}
+
+			{% if posts.has_next %}
+			<li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+			{% else %}
+			<li class="page-item disabled"><a class="page-link" href="#" aria-label="Next"><span
+						aria-hidden="true">&raquo;</span></a></li>
+			{% endif %}
 		</ul>
+		{% endif %}
+	</nav>
+</div>
 
 {% endblock %}
