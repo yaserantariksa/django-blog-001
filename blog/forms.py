@@ -37,3 +37,4 @@ class PostSearchForm(forms.Form):
         self.fields['q'].lable = 'Search For'
         self.fields['q'].widget.attrs.update({'class' : 'form-control dropdown-toggle menudd'})
         self.fields['q'].widget.attrs.update({'data-bs-toggle':'dropdown'})
+        self.fields['q'].widget.attrs.update({'autofocus':True})

@@ -21,9 +21,9 @@
         found {{ total_result }} result{{total_result|pluralize}}
         {% endwith %}
     </h6>    
+    <h5 class="my-3">Search result : </h5>
     {% endif %}
 
-    <h5 class="my-3">Search result : </h5>
     {% for result in results %}
     <div class="card my-2" width="80%">
         <a href="{{ result.get_absolute_url }}" class="text-decoration-none text-reset">

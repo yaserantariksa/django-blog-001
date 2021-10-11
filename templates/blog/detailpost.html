@@ -13,8 +13,9 @@ Categories : {% for cat in post.category.all %} {{ cat }} | {% endfor %}
 <p>
 	<small> created : {{post.author}} | {{post.published_date}} </small>
 </p>
-<img src="{{ post.image.url }}" alt="{{post.title}}" style="width: 300px" />
-
+<div class="d-flex align-items-center justify-content-center">
+<img src="{{ post.image.url }}" alt="{{post.title}}" style="width: 300px">
+</div>
 <p>{{post.content|safe}}</p>
 <hr />
 	{% with allcomments.count as total_comments %} 

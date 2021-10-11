@@ -66,16 +66,20 @@ def detailpost(request,post):
     )
 
 class CatListView(ListView):
+    model = Post
     template_name = 'blog/category.html'
-    context_object_name = 'catlist'
+    paginate_by = 2
+    # queryset = Post.objects.filter(category__name=self.kwargs['category']).filter(status='published')
+    # context_object_name = 'catlist'
 
-    def get_queryset(self):
-        content = {
-            'cat' : self.kwargs['category'],
-            'posts' : Post.objects.filter(category__name=self.kwargs['category']).filter(status='published')
-        }
+    def get_queryset(self, *args, **kwargs):
+        return Post.objects.filter(category__name=self.kwargs.get('cat'))
+        # content = {
+        #     'cat' : self.kwargs['cat'],
+        #     'posts' : Post.objects.filter(category__name=self.kwargs['cat']).filter(status='published')
+        # }
+        # return content
 
-        return content
 
 def category_list(request):
     category_list = Category.objects.exclude(name='default')

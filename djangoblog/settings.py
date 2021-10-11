@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'mptt',
     
     'blog',
+    'accounts',
 
 
 ]
@@ -137,3 +138,8 @@ MEDIA_ROOT = BASE_DIR/"media_root"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'accounts:profile'
+LOGOUT_REDIRECT_URL = 'blog:postlist'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'

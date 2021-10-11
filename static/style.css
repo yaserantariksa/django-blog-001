@@ -1,0 +1,8 @@
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.small {
+    font-size: 0.875rem;
+    color: #4b4b4b
+}
